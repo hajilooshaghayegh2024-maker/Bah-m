@@ -18,6 +18,7 @@ import Booking from "./pages/Booking";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
+import FindLocations from "./pages/FindLocations";
 import { useAuth } from "./components/AuthProvider";
 import { useLocation } from "react-router-dom";
 
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="become-companion" element={<BecomeCompanion />} />
           <Route path="pricing" element={<Pricing />} />
           <Route path="faq" element={<FAQ />} />
+          <Route path="find-locations" element={<FindLocations />} />
           <Route path="login" element={<Login />} />
           <Route path="dashboard" element={
             <ProtectedRoute>

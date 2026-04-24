@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Miten se toimii", href: "/how-it-works" },
   { name: "Turvallisuus", href: "/trust-safety" },
   { name: "Hinnasto", href: "/pricing" },
+  { name: "Sijainnit", href: "/find-locations" },
   { name: "Ryhdy seuralaiseksi", href: "/become-companion" },
 ];
 
@@ -20,6 +21,7 @@ export default function Navbar() {
     { name: lang === 'fi' ? "Miten se toimii" : "How it works", href: "/how-it-works" },
     { name: lang === 'fi' ? "Turvallisuus" : "Trust & Safety", href: "/trust-safety" },
     { name: lang === 'fi' ? "Hinnasto" : "Pricing", href: "/pricing" },
+    { name: lang === 'fi' ? "Sijainnit" : "Locations", href: "/find-locations" },
     { name: lang === 'fi' ? "Ryhdy seuralaiseksi" : "Become a companion", href: "/become-companion" },
   ];
 

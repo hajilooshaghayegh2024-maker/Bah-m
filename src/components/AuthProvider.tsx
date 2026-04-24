@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 
 interface UserProfile {
@@ -39,6 +39,7 @@ interface AuthContextType {
   language: 'fi' | 'en';
   setLanguage: (lang: 'fi' | 'en') => void;
   signOut: () => Promise<void>;
+  updateProfile: (data: Partial<UserProfile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -50,29 +51,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [language, setLanguage] = useState<'fi' | 'en'>('fi');
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    let unsubscribeProfile: (() => void) | undefined;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      
+      if (unsubscribeProfile) {
+        unsubscribeProfile();
+      }
+
       if (user) {
         const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setProfile(docSnap.data() as UserProfile);
-        } else {
-          setProfile(null);
-        }
+        unsubscribeProfile = onSnapshot(docRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setProfile(docSnap.data() as UserProfile);
+          } else {
+            // Initialize basic profile if it doesn't exist
+            const basicProfile: UserProfile = {
+              uid: user.uid,
+              email: user.email || '',
+              displayName: user.displayName || '',
+              role: 'seeker',
+              isVerified: false,
+              profileSetup: false,
+            };
+            setDoc(docRef, basicProfile);
+            setProfile(basicProfile);
+          }
+          setLoading(false);
+        });
       } else {
         setProfile(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeProfile) unsubscribeProfile();
+    };
   }, []);
 
   const signOut = () => auth.signOut();
 
+  const updateProfile = async (data: Partial<UserProfile>) => {
+    if (!user) return;
+    const docRef = doc(db, 'users', user.uid);
+    await updateDoc(docRef, data);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, language, setLanguage, signOut }}>
+    <AuthContext.Provider value={{ user, profile, loading, language, setLanguage, signOut, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

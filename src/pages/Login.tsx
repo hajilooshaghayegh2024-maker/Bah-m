@@ -8,7 +8,7 @@ import { signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, si
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { motion } from 'motion/react';
-import { LogIn, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus, ArrowRight } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function Login() {
