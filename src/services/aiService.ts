@@ -5,9 +5,11 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY!);
 
 export async function getRecommendations(seekerProfile: any, companions: any[]) {
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
   const prompt = `
     You are a matching assistant for Bahäm, a companionship platform for elderly and those in need.
     Given a seeker's profile and a list of potential companions, rank the companions based on:
@@ -25,12 +27,9 @@ export async function getRecommendations(seekerProfile: any, companions: any[]) 
   `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: prompt,
-    });
-
-    const text = response.text || "";
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
     // Simple parsing - in production we'd use responseSchema or more robust parsing
     const jsonStr = text.match(/\[.*\]/s)?.[0];
     return jsonStr ? JSON.parse(jsonStr) : [];

@@ -36,6 +36,8 @@ interface AuthContextType {
   user: FirebaseUser | null;
   profile: UserProfile | null;
   loading: boolean;
+  language: 'fi' | 'en';
+  setLanguage: (lang: 'fi' | 'en') => void;
   signOut: () => Promise<void>;
 }
 
@@ -45,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [language, setLanguage] = useState<'fi' | 'en'>('fi');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -55,7 +58,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (docSnap.exists()) {
           setProfile(docSnap.data() as UserProfile);
         } else {
-          // If no profile, we might need they to finish onboarding
           setProfile(null);
         }
       } else {
@@ -70,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = () => auth.signOut();
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signOut }}>
+    <AuthContext.Provider value={{ user, profile, loading, language, setLanguage, signOut }}>
       {children}
     </AuthContext.Provider>
   );

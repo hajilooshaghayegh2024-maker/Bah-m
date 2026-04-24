@@ -14,7 +14,14 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, language: lang, setLanguage: setLang } = useAuth();
+
+  const navLinks = [
+    { name: lang === 'fi' ? "Miten se toimii" : "How it works", href: "/how-it-works" },
+    { name: lang === 'fi' ? "Turvallisuus" : "Trust & Safety", href: "/trust-safety" },
+    { name: lang === 'fi' ? "Hinnasto" : "Pricing", href: "/pricing" },
+    { name: lang === 'fi' ? "Ryhdy seuralaiseksi" : "Become a companion", href: "/become-companion" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-baham-cream/80 backdrop-blur-md border-b border-baham-blue/10">
@@ -52,15 +59,32 @@ export default function Navbar() {
               </>
             ) : (
               <Link to="/login" className="text-sm font-medium text-baham-ink hover:text-baham-clay">
-                Kirjaudu
+                {lang === 'fi' ? 'Kirjaudu' : 'Sign In'}
               </Link>
             )}
-            <div className="flex items-center gap-2 px-2">
-              <button className="text-lg hover:opacity-80 transition-opacity cursor-pointer" title="English">🇺🇸</button>
-              <button className="text-lg hover:opacity-80 transition-opacity cursor-pointer" title="Suomi">🇫🇮</button>
+            <div className="flex items-center gap-1 px-2 border-l border-baham-sand/30 ml-2">
+              <button 
+                onClick={() => setLang('en')}
+                className={`text-lg transition-all cursor-pointer ${lang === 'en' ? 'scale-110 grayscale-0 ring-2 ring-baham-blue/30 rounded-full' : 'grayscale opacity-50 hover:opacity-100 hover:grayscale-0'}`} 
+                title="English"
+              >
+                🇺🇸
+              </button>
+              <button 
+                onClick={() => setLang('fi')}
+                className={`text-lg transition-all cursor-pointer ${lang === 'fi' ? 'scale-110 grayscale-0 ring-2 ring-baham-blue/30 rounded-full' : 'grayscale opacity-50 hover:opacity-100 hover:grayscale-0'}`} 
+                title="Suomi"
+              >
+                🇫🇮
+              </button>
             </div>
-            <Link to="/match-results" className="btn-primary py-2 px-6 text-sm">
-              Etsi tukea
+            {!user && (
+              <Link to="/login" state={{ from: pathname }} className="px-6 py-2 rounded-full border-2 border-baham-blue text-baham-blue font-bold hover:bg-baham-blue hover:text-white transition-all transform hover:scale-105">
+                {lang === 'fi' ? 'Liity' : 'Join'}
+              </Link>
+            )}
+            <Link to="/match-results" className="px-6 py-2 rounded-full bg-baham-blue text-white font-bold shadow-lg shadow-baham-blue/20 hover:brightness-110 transform hover:scale-105 transition-all">
+              {lang === 'fi' ? 'Etsi seuralainen' : 'Find Support'}
             </Link>
           </div>
 
@@ -107,15 +131,27 @@ export default function Navbar() {
                 </>
               ) : (
                 <Link to="/login" onClick={() => setIsOpen(false)} className="text-lg font-medium text-baham-ink">
-                  Kirjaudu
+                  {lang === 'fi' ? 'Kirjaudu' : 'Sign In'}
                 </Link>
               )}
-              <div className="flex items-center gap-4 py-2">
-                <button className="text-2xl hover:scale-110 transition-transform" title="English">🇺🇸</button>
-                <button className="text-2xl hover:scale-110 transition-transform" title="Suomi">🇫🇮</button>
+              <div className="flex items-center gap-6 py-2 border-y border-baham-sand/20 px-2">
+                <button 
+                  onClick={() => setLang('en')}
+                  className={`text-2xl transition-all ${lang === 'en' ? 'scale-125 grayscale-0' : 'grayscale opacity-50'}`} 
+                  title="English"
+                >
+                  🇺🇸
+                </button>
+                <button 
+                  onClick={() => setLang('fi')}
+                  className={`text-2xl transition-all ${lang === 'fi' ? 'scale-125 grayscale-0' : 'grayscale opacity-50'}`} 
+                  title="Suomi"
+                >
+                  🇫🇮
+                </button>
               </div>
               <Link to="/match-results" onClick={() => setIsOpen(false)} className="btn-primary text-center">
-                Find Support
+                {lang === 'fi' ? 'Etsi tukea' : 'Find Support'}
               </Link>
             </div>
           </motion.div>

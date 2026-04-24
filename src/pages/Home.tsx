@@ -14,8 +14,8 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="inline-block px-4 py-1 rounded-full bg-baham-sand text-baham-slate text-xs font-bold uppercase tracking-wider mb-6">
-                Verified Companionship
+              <span className="inline-block px-4 py-1 rounded-full bg-baham-blue/10 text-baham-slate text-xs font-bold uppercase tracking-wider mb-6">
+                Vahvistettua seuraa
               </span>
               <h1 className="text-5xl lg:text-7xl font-bold text-baham-ink leading-tight mb-8">
                 Tukea ja <br />
@@ -24,12 +24,12 @@ export default function Home() {
               <p className="text-xl text-baham-ink/70 mb-10 leading-relaxed max-w-lg">
                 Bahäm yhdistää sinut vahvistettuihin seuralaisiin Helsingissä. Turvallista tukea, apua asiointiin ja aitoa seuraa arkeen.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/match-results" className="btn-primary text-center">
-                  Etsi seuralainen
+              <div className="flex flex-col sm:flex-row gap-4 mb-10">
+                <Link to="/login" className="btn-primary bg-baham-blue text-white hover:brightness-110 px-10 py-5 rounded-full text-xl shadow-2xl shadow-baham-blue/30 flex items-center justify-center gap-3 group transform hover:-translate-y-1 transition-all">
+                  Liity ilmaiseksi <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link to="/how-it-works" className="btn-secondary text-center">
-                  Miten se toimii?
+                <Link to="/match-results" className="btn-secondary border-baham-blue/30 text-baham-blue px-10 py-5 rounded-full text-xl flex items-center justify-center hover:bg-baham-blue/5 transition-all">
+                  Etsi seuralainen
                 </Link>
               </div>
               <div className="mt-12 flex items-center gap-4 text-sm text-baham-ink/60">
@@ -40,7 +40,7 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <span>Joined by 2,000+ happy members</span>
+                <span>Yli 2000 tyytyväistä jäsentä</span>
               </div>
             </motion.div>
 
@@ -98,27 +98,27 @@ export default function Home() {
       {/* Services Grid */}
       <section className="py-24 px-4 bg-baham-blue/5">
         <div className="max-w-7xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold text-baham-ink mb-4">How can we help you?</h2>
-          <p className="text-baham-slate max-w-2xl mx-auto">
-            Our companions provide light support that makes daily life easier and more enjoyable.
+          <h2 className="text-4xl font-bold text-baham-ink mb-4">Me olemme täällä sinua varten.</h2>
+          <p className="text-baham-slate max-w-2xl mx-auto text-lg">
+            Haluamme tehdä päivistäsi hieman helpompia ja huomattavasti mukavampia.
           </p>
         </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              title: "Social Connection",
-              desc: "Conversation, morning walks, coffee outings, or visiting local museums.",
+              title: "Sosiaalinen yhteys",
+              desc: "Keskusteluja, aamukävelyitä, kahvitteluhetkiä tai vierailuja paikallisiin museoihin.",
               icon: <Coffee className="text-baham-blue" />,
             },
             {
-              title: "Daily Assistance",
-              desc: "Help with groceries, technology setup, or light organizational tasks.",
+              title: "Arjen apu",
+              desc: "Apua kauppareissuilla, teknologian käytössä tai pienissä järjestelytehtävissä.",
               icon: <Clock className="text-baham-blue" />,
             },
             {
-              title: "Safe Escort",
-              desc: "Reliable companionship for appointments, events, or travel support.",
+              title: "Turvallinen saatto",
+              desc: "Luotettavaa seuraa tapaamisiin, tapahtumiin tai tukea matkustamiseen.",
               icon: <ShieldCheck className="text-baham-blue" />,
             }
           ].map((service, idx) => (
@@ -127,16 +127,42 @@ export default function Home() {
               whileHover={{ y: -10 }}
               className="card-baham flex flex-col items-center text-center py-12"
             >
-              <div className="w-16 h-16 bg-baham-sand/30 rounded-2xl flex items-center justify-center mb-6">
+              <div className="w-16 h-16 bg-baham-blue/10 rounded-2xl flex items-center justify-center mb-6">
                 {service.icon}
               </div>
               <h3 className="text-xl font-bold text-baham-ink mb-4">{service.title}</h3>
               <p className="text-baham-slate leading-relaxed mb-8">{service.desc}</p>
               <Link to="/match-results" className="text-baham-blue font-bold flex items-center gap-2 hover:gap-3 transition-all">
-                Learn more <ArrowRight size={16} />
+                Lue lisää <ArrowRight size={16} />
               </Link>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* Testimonials or "Why Us" */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-baham-ink mb-4">Miksi valita Bahäm?</h2>
+            <p className="text-baham-slate">Luomme aitoja yhteyksiä ja turvallista arkea.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: <HeartHandshake />, label: "Aito välittäminen", color: "bg-pink-50 text-pink-500" },
+              { icon: <ShieldCheck />, label: "100% Turvallinen", color: "bg-blue-50 text-blue-500" },
+              { icon: <Clock />, label: "Joustava apu", color: "bg-amber-50 text-amber-500" },
+              { icon: <MapPin />, label: "Paikallinen haku", color: "bg-green-50 text-green-500" }
+            ].map((item, i) => (
+              <div key={i} className="p-8 rounded-3xl bg-white border border-baham-sand/30 text-center hover:shadow-xl transition-all group">
+                <div className={`w-14 h-14 ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform`}>
+                  {item.icon}
+                </div>
+                <h4 className="font-bold text-baham-ink">{item.label}</h4>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -145,13 +171,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="bg-baham-ink rounded-[40px] p-12 lg:p-20 text-white flex flex-col lg:flex-row items-center gap-16">
             <div className="flex-1 text-center lg:text-left">
-              <h2 className="text-4xl font-bold mb-6">Your safety is our <br /> absolute priority.</h2>
+              <h2 className="text-4xl font-bold mb-6">Turvallisuutesi on meille <br /> ensisijaisen tärkeää.</h2>
               <div className="space-y-6 mb-10 text-left">
                 {[
-                  "Criminal Record Extract (Rikostaustaote) verification",
-                  "Identity verification for all members",
-                  "Strict non-medical & non-dating policy",
-                  "Verified reviews from local neighbors"
+                  "Rikostaustaote on vahvistettu kaikilta",
+                  "Henkilöllisyyden varmentaminen kaikille jäsenille",
+                  "Tiukka ei lääkinnällistä apua- ja ei deittailua -periaate",
+                  "Vahvistetut arvostelut paikallisilta naapureilta"
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-4 justify-center lg:justify-start">
                     <div className="w-6 h-6 bg-baham-blue rounded-full flex items-center justify-center text-white">
@@ -161,8 +187,8 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link to="/trust-safety" className="btn-primary bg-white text-baham-ink hover:bg-baham-sand">
-                Our Trust Standards
+              <Link to="/trust-safety" className="btn-primary bg-white text-baham-ink hover:bg-baham-blue/20">
+                Turvallisuusstandardimme
               </Link>
             </div>
             <div className="flex-1 grid grid-cols-2 gap-4">
@@ -194,13 +220,13 @@ export default function Home() {
       {/* CTA */}
       <section className="py-24 px-4 bg-baham-blue/10">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8 text-baham-ink">Ready to find companionship?</h2>
+          <h2 className="text-4xl font-bold mb-8 text-baham-ink">Oletko valmis löytämään seuraa?</h2>
           <p className="text-lg text-baham-slate mb-10">
-            Join the Bahäm community today and find a verified companion who matches your needs and personality.
+            Liity Bahäm-yhteisöön tänään ja löydä vahvistettu seuralainen, joka sopii tarpeisiisi ja persoonaasi.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/match-results" className="btn-primary px-12">Get Started</Link>
-            <Link to="/become-companion" className="btn-secondary px-12">Become a Companion</Link>
+            <Link to="/match-results" className="btn-primary px-12">Aloita tästä</Link>
+            <Link to="/become-companion" className="btn-secondary px-12 text-baham-ink">Ryhdy seuralaiseksi</Link>
           </div>
         </div>
       </section>

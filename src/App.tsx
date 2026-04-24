@@ -19,11 +19,20 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
 import { useAuth } from "./components/AuthProvider";
+import { useLocation } from "react-router-dom";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <Navigate to="/login" />;
+  const location = useLocation();
+
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-baham-cream">
+      <div className="w-12 h-12 border-4 border-baham-blue border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+  
+  if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
+  
   return <>{children}</>;
 }
 

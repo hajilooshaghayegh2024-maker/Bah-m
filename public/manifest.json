@@ -1,0 +1,16 @@
+{
+  "name": "Bahäm - Companionship",
+  "short_name": "Bahäm",
+  "description": "Premium companionship platform for Helsinki.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9F8F6",
+  "theme_color": "#A3CFE5",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/512/hand-holding-heart.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

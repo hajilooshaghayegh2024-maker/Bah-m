@@ -63,7 +63,7 @@ const companions = [
 export default function MatchResults() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [recommendedIds, setRecommendedIds] = useState<any[]>([]);
-  const { profile } = useAuth();
+  const { profile, language: lang } = useAuth();
   const [isAiLoading, setIsAiLoading] = useState(false);
 
   useEffect(() => {
@@ -183,8 +183,13 @@ export default function MatchResults() {
         </div>
 
         <div className="mt-16 text-center">
-          <p className="text-baham-ink/40 mb-8 italic">Didn't find what you were looking for? We're adding new companions weekly.</p>
-          <button className="btn-secondary rounded-3xl">Load More</button>
+          <p className="text-baham-ink/40 mb-8 italic">{lang === 'fi' ? 'Etkö löytänyt etsimääsi? Lisäämme uusia seuralaisia viikoittain.' : "Didn't find what you were looking for? We're adding new companions weekly."}</p>
+          <button 
+            onClick={() => alert(lang === 'fi' ? 'Lisää seuralaisia tulossa pian!' : 'More companions coming soon!')}
+            className="btn-secondary rounded-3xl"
+          >
+            {lang === 'fi' ? 'Lataa lisää' : 'Load More'}
+          </button>
         </div>
       </div>
     </div>
