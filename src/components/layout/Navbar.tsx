@@ -1,0 +1,126 @@
+import { Link, useLocation } from "react-router-dom";
+import { Heart, Menu, X, LogOut, User } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { useAuth } from "../../components/AuthProvider";
+
+const navLinks = [
+  { name: "Miten se toimii", href: "/how-it-works" },
+  { name: "Turvallisuus", href: "/trust-safety" },
+  { name: "Hinnasto", href: "/pricing" },
+  { name: "Ryhdy seuralaiseksi", href: "/become-companion" },
+];
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
+  const { user, profile, signOut } = useAuth();
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-baham-cream/80 backdrop-blur-md border-b border-baham-blue/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 bg-baham-blue rounded-xl flex items-center justify-center text-white transition-transform group-hover:scale-105">
+              <Heart size={24} fill="currentColor" />
+            </div>
+            <span className="text-2xl font-bold tracking-tight text-baham-ink">Bahäm</span>
+          </Link>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className={`text-sm font-medium transition-colors hover:text-baham-blue ${
+                  pathname === link.href ? "text-baham-blue" : "text-baham-slate"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="h-6 w-px bg-baham-sand/50" />
+            {user ? (
+              <>
+                <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-baham-ink hover:text-baham-clay">
+                  <User size={18} /> {profile?.displayName || 'Dashboard'}
+                </Link>
+                <button onClick={signOut} className="text-sm font-medium text-baham-ink hover:text-red-500 transition-colors">
+                  <LogOut size={18} />
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="text-sm font-medium text-baham-ink hover:text-baham-clay">
+                Kirjaudu
+              </Link>
+            )}
+            <div className="flex items-center gap-2 px-2">
+              <button className="text-lg hover:opacity-80 transition-opacity cursor-pointer" title="English">🇺🇸</button>
+              <button className="text-lg hover:opacity-80 transition-opacity cursor-pointer" title="Suomi">🇫🇮</button>
+            </div>
+            <Link to="/match-results" className="btn-primary py-2 px-6 text-sm">
+              Etsi tukea
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 text-baham-ink"
+            id="mobile-menu-toggle"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Nav */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white border-b border-baham-blue/10 overflow-hidden"
+          >
+            <div className="px-4 py-8 flex flex-col gap-6">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="text-lg font-medium text-baham-ink"
+                >
+                  {link.name}
+                </Link>
+              ))}
+              <hr className="border-baham-blue/10" />
+              {user ? (
+                <>
+                  <Link to="/dashboard" onClick={() => setIsOpen(false)} className="text-lg font-medium text-baham-ink">
+                    Dashboard
+                  </Link>
+                  <button onClick={() => { signOut(); setIsOpen(false); }} className="text-lg font-medium text-left text-red-500">
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" onClick={() => setIsOpen(false)} className="text-lg font-medium text-baham-ink">
+                  Kirjaudu
+                </Link>
+              )}
+              <div className="flex items-center gap-4 py-2">
+                <button className="text-2xl hover:scale-110 transition-transform" title="English">🇺🇸</button>
+                <button className="text-2xl hover:scale-110 transition-transform" title="Suomi">🇫🇮</button>
+              </div>
+              <Link to="/match-results" onClick={() => setIsOpen(false)} className="btn-primary text-center">
+                Find Support
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+}

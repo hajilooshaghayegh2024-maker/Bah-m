@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "System users (Seekers and Companions)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["seeker", "companion", "admin"] },
+        "isVerified": { "type": "boolean" },
+        "profileSetup": { "type": "boolean" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" },
+            "address": { "type": "string" },
+            "radius": { "type": "number", "description": "Interaction radius in km" }
+          }
+        },
+        "companionData": {
+          "type": "object",
+          "properties": {
+            "categories": { "type": "array", "items": { "type": "string" } },
+            "languages": { "type": "array", "items": { "type": "string" } },
+            "interests": { "type": "array", "items": { "type": "string" } },
+            "hourlyRate": { "type": "number" },
+            "rating": { "type": "number" },
+            "reviewCount": { "type": "number" },
+            "availability": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Service booking requests and confirmations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "seekerId": { "type": "string" },
+        "companionId": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "cancelled", "completed"] },
+        "startTime": { "type": "string", "format": "date-time" },
+        "duration": { "type": "number", "description": "Duration in hours" },
+        "totalPrice": { "type": "number" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["seekerId", "companionId", "category", "status", "startTime"]
+    },
+    "Rating": {
+      "title": "Rating",
+      "description": "User reviews for sessions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "bookingId": { "type": "string" },
+        "fromId": { "type": "string" },
+        "toId": { "type": "string" },
+        "stars": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/bookings/{bookingId}": {
+      "schema": "Booking",
+      "description": "Booking records"
+    },
+    "/ratings/{ratingId}": {
+      "schema": "Rating",
+      "description": "Rating records"
+    }
+  }
+}

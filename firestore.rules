@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidUser(data) {
+      return data.uid == request.auth.uid &&
+             data.email is string &&
+             data.role in ['seeker', 'companion'] &&
+             data.keys().hasAll(['uid', 'email', 'role']);
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if (isOwner(userId) || isAdmin()) && 
+                    // Prevent users from changing their own role or verification status unless admin
+                    (isAdmin() || (request.resource.data.role == resource.data.role && 
+                                  request.resource.data.isVerified == resource.data.isVerified));
+    }
+
+    match /bookings/{bookingId} {
+      allow read: if isSignedIn() && (
+        request.auth.uid == resource.data.seekerId || 
+        request.auth.uid == resource.data.companionId ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.seekerId;
+      allow update: if isSignedIn() && (
+        request.auth.uid == resource.data.seekerId || 
+        request.auth.uid == resource.data.companionId ||
+        isAdmin()
+      );
+    }
+
+    match /ratings/{ratingId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.fromId;
+    }
+  }
+}
