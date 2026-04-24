@@ -53,11 +53,7 @@ export default function App() {
               <Dashboard />
             </ProtectedRoute>
           } />
-          <Route path="match-results" element={
-            <ProtectedRoute>
-              <MatchResults />
-            </ProtectedRoute>
-          } />
+          <Route path="match-results" element={<MatchResults />} />
           <Route path="booking" element={
             <ProtectedRoute>
               <Booking />
